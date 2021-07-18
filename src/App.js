@@ -1,15 +1,18 @@
 import "./App.css";
 import { useState } from "react";
 import { v4 as uuidv4 } from "uuid";
+import Login from "./Login";
 
 function App() {
   const [todoInput, setTodoInput] = useState("");
   const [todoList, setTodoList] = useState([]);
 
   const addItem = () => {
-    const todoObject = { id: uuidv4(), value: todoInput };
-    setTodoList([...todoList, todoObject]);
-    setTodoInput("");
+    if (todoInput) {
+      const todoObject = { id: uuidv4(), value: todoInput };
+      setTodoList([...todoList, todoObject]);
+      setTodoInput("");
+    }
   };
 
   const onKeyPress = (e) => {
@@ -32,7 +35,8 @@ function App() {
 
   return (
     <div className="App">
-      <h1>TO DO app</h1>
+      <h1>TODO app</h1>
+      <Login />
       <input
         type="text"
         placeholder="add to do item"
