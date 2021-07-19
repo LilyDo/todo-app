@@ -3,7 +3,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { Dialog, TextField, Button, Typography } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 
-import { login, hideLoginForm } from "../../userSlice";
+import { login, hideLoginForm } from "../../slices/user";
 
 export default function Login() {
   const [username, setUsername] = useState("");

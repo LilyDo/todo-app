@@ -16,20 +16,26 @@ import {
 import DeleteIcon from "@material-ui/icons/Delete";
 import { makeStyles } from "@material-ui/core/styles";
 
-import { logout, showLoginForm } from "../../userSlice";
+import { logout, showLoginForm } from "../../slices/user";
+import {
+  addTodo,
+  deleteTodo,
+  markTodoAsDone,
+  clearAll,
+} from "../../slices/todo";
 
 function TodoList() {
   const classes = useStyles();
 
   const [todoInput, setTodoInput] = useState("");
-  const [todoList, setTodoList] = useState([]);
+  const todoList = useSelector((state) => state.todo.todoList);
   const username = useSelector((state) => state.user.username);
   const dispatch = useDispatch();
 
   const addItem = () => {
     if (todoInput) {
       const todoObject = { id: uuidv4(), value: todoInput };
-      setTodoList([...todoList, todoObject]);
+      dispatch(addTodo(todoObject));
       setTodoInput("");
     }
   };
@@ -42,18 +48,21 @@ function TodoList() {
 
   const markAsDone = (itemToMarkAsDone) => {
     const index = todoList.findIndex((item) => item.id === itemToMarkAsDone.id);
-    todoList[index].done = !todoList[index].done;
-    setTodoList([...todoList]);
+    dispatch(markTodoAsDone(index));
   };
 
-  const deleteTodo = (itemToDelete) => {
+  const deleteItem = (itemToDelete) => {
     const index = todoList.findIndex((item) => item.id === itemToDelete.id);
-    todoList.splice(index, 1);
-    setTodoList([...todoList]);
+    dispatch(deleteTodo(index));
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
+  };
+
+  const signout = () => {
+    dispatch(logout());
+    dispatch(clearAll());
   };
 
   return (
@@ -68,11 +77,7 @@ function TodoList() {
             <div>
               <Typography>
                 Hello {username},{" "}
-                <Link
-                  color="inherit"
-                  href="#"
-                  onClick={() => dispatch(logout())}
-                >
+                <Link color="inherit" href="#" onClick={signout}>
                   logout
                 </Link>
               </Typography>
@@ -115,7 +120,7 @@ function TodoList() {
               primary={item.value}
             ></ListItemText>
 
-            <DeleteIcon onClick={() => deleteTodo(item)} value="delete" />
+            <DeleteIcon onClick={() => deleteItem(item)} value="delete" />
           </ListItem>
         ))}
       </List>

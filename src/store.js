@@ -10,7 +10,8 @@ import {
   REGISTER,
 } from "redux-persist";
 import { combineReducers } from "redux";
-import userReducer from "./userSlice";
+import userReducer from "./slices/user";
+import todoReducer from "./slices/todo";
 
 const persistConfig = {
   key: "root",
@@ -18,7 +19,7 @@ const persistConfig = {
   storage,
 };
 
-const rootReducer = combineReducers({ user: userReducer });
+const rootReducer = combineReducers({ user: userReducer, todo: todoReducer });
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);
 
